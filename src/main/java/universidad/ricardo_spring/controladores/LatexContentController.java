@@ -71,12 +71,12 @@ public class LatexContentController {
     @GetMapping("/download/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
         try {
-            Path filePath = Paths.get(uploadDir, fileName);
+            Path filePath = Paths.get("/app/pdfs-latex", fileName);
             if (!Files.exists(filePath)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            Resource resource = new ClassPathResource(filePath.toString());
+            Resource resource = new FileSystemResource(filePath.toFile());
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"");
 
