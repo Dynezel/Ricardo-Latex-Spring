@@ -66,12 +66,13 @@ public class LatexContentController {
         return latexContentService.getLatexContentById(id);
     }
 
-    @PreAuthorize("permitAll()")
+
     @GetMapping("/download/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
         // Define el directorio externo donde se guardarán los PDF
+        String externalDir = "/app/pdfs-latex";
 
-        Path filePath = Paths.get(uploadDir, fileName);
+        Path filePath = Paths.get(externalDir, fileName);
         if (!Files.exists(filePath)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
