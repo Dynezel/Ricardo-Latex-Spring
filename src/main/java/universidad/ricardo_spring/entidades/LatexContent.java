@@ -15,6 +15,6 @@ public class LatexContent {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String content; // Contenido LaTeX
-    private String pdfPath; // Ruta del archivo PDF
+    private String pdf;
     private String categoria;
 }

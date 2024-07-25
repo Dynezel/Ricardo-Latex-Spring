@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,23 +68,35 @@ public class LatexContentController {
     }
 
 
-    @CrossOrigin(origins = "https://ricardo-latex-react.vercel.app")
-    @GetMapping("/download/{fileName:.+}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
+    @GetMapping("/download/{id}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long id) {
         try {
-            Path filePath = Paths.get("/app/pdfs-latex", fileName);
-            if (!Files.exists(filePath)) {
+            Optional<LatexContent> optionalLatexContent = latexContentService.getLatexContentById(id);
+
+            if (optionalLatexContent.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            Resource resource = new FileSystemResource(filePath.toFile());
+            LatexContent latexContent = optionalLatexContent.get();
+            String pdfString = latexContent.getPdf();
+
+            if (pdfString == null || pdfString.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            // Decodificar la cadena Base64 a un arreglo de bytes
+            byte[] pdfBytes = Base64.getDecoder().decode(pdfString);
+
+            ByteArrayResource resource = new ByteArrayResource(pdfBytes);
+
             HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"");
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=file.pdf");
 
             return ResponseEntity.ok()
                     .headers(headers)
                     .body(resource);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
