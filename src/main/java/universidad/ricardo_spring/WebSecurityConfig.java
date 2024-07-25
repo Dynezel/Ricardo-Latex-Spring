@@ -56,15 +56,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/pdfs/**")
-                .addResourceLocations("classpath:/static/pdfs/");
+        registry.addResourceHandler("/pdfs-latex/**")
+                .addResourceLocations("classpath:/app/pdfs-latex/");
     }
 
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedOrigin("https://ricardo-latex-react.vercel.app");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setAllowCredentials(true); // Permitir cookies de sesión
