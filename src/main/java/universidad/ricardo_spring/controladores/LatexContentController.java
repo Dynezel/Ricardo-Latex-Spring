@@ -69,27 +69,22 @@ public class LatexContentController {
 
     @GetMapping("/download/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
-        // Define el directorio externo donde se guardarán los PDF
-        String externalDir = "/app/pdfs-latex";
-
-        Path filePath = Paths.get(externalDir, fileName);
-        if (!Files.exists(filePath)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        Resource resource;
         try {
-            resource = new UrlResource(filePath.toUri());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+            Path filePath = Paths.get(uploadDir, fileName);
+            if (!Files.exists(filePath)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            Resource resource = new ClassPathResource(filePath.toString());
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(resource);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(resource);
     }
 
 

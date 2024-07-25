@@ -25,9 +25,8 @@ WORKDIR /ricardo-spring
 # Copiamos el archivo JAR generado desde la etapa de build
 COPY --from=build /ricardo-spring/target/ricardo-spring-0.0.1-SNAPSHOT.jar app.jar
 
-# Crea el directorio para los archivos PDF y declara un volumen
+# Crea el directorio para los archivos PDF
 RUN mkdir -p /app/pdfs-latex
-VOLUME /app/pdfs-latex
 
 # Exponemos el puerto en el que corre la aplicación
 EXPOSE 8080
