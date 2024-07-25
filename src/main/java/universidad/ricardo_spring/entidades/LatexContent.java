@@ -15,6 +15,7 @@ public class LatexContent {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String content; // Contenido LaTeX
-    private String pdf;
+    @Lob // Asegúrate de que esta anotación esté presente si es un tipo de datos grande
+    private byte[] pdf;
     private String categoria;
 }

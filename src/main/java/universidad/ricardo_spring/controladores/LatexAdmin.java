@@ -34,38 +34,26 @@ public class LatexAdmin {
                                                 @RequestParam("content") String content,
                                                 @RequestParam("categoria") String categoria,
                                                 @RequestParam(value = "file", required = false) MultipartFile file) {
-        File dir = new File(uploadDir);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        String fileName = null;
-        if (file != null) {
-            try {
-                fileName = file.getOriginalFilename();
-                Path filePath = Paths.get(uploadDir, fileName);
-                Files.write(filePath, file.getBytes());
-                LatexContent latexContent = new LatexContent();
-                latexContent.setTitle(title);
-                latexContent.setContent(content);
-                latexContent.setCategoria(categoria);
-                latexContent.setPdfPath(filePath.toString());
-
-                latexContentService.createLatexContent(latexContent);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return new ResponseEntity<>("Error al guardar el archivo", HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        } else {
+        try {
             LatexContent latexContent = new LatexContent();
             latexContent.setTitle(title);
             latexContent.setContent(content);
             latexContent.setCategoria(categoria);
 
-            latexContentService.createLatexContent(latexContent);
-        }
+            if (file != null) {
+                // Obtener el contenido del archivo como un arreglo de bytes
+                byte[] fileBytes = file.getBytes();
+                latexContent.setPdf(fileBytes);
+            }
 
-        return new ResponseEntity<>("Contenido creado exitosamente", HttpStatus.OK);
+            // Guardar el contenido en la base de datos
+            latexContentService.createLatexContent(latexContent);
+
+            return new ResponseEntity<>("Contenido creado exitosamente", HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error al guardar el archivo", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PreAuthorize("ROLE_ADMINISTRADOR")

@@ -21,7 +21,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,23 +70,22 @@ public class LatexContentController {
     @GetMapping("/download/{id}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long id) {
         try {
+            // Obtiene el contenido LaTeX por ID
             Optional<LatexContent> optionalLatexContent = latexContentService.getLatexContentById(id);
 
             if (optionalLatexContent.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
+            // Obtiene el objeto LatexContent del Optional
             LatexContent latexContent = optionalLatexContent.get();
-            String pdfString = latexContent.getPdf();
 
-            if (pdfString == null || pdfString.isEmpty()) {
+            // Verifica si el archivo PDF está presente
+            if (latexContent.getPdf() == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            // Decodificar la cadena Base64 a un arreglo de bytes
-            byte[] pdfBytes = Base64.getDecoder().decode(pdfString);
-
-            ByteArrayResource resource = new ByteArrayResource(pdfBytes);
+            ByteArrayResource resource = new ByteArrayResource(latexContent.getPdf());
 
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=file.pdf");
