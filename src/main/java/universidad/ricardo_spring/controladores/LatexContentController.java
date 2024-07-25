@@ -67,6 +67,7 @@ public class LatexContentController {
     }
 
 
+    @CrossOrigin(origins = "https://ricardo-latex-react.vercel.app")
     @GetMapping("/download/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
         try {
