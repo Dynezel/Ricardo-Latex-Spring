@@ -84,6 +84,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                         "/usuarios/register",
                         "/api/latex/download/**"
                 ).permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin().disable();
     }
