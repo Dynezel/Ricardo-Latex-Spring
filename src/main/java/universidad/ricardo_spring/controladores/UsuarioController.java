@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("https://ricardo-latex-react.vercel.app")
 @RequestMapping("/usuarios")
 public class UsuarioController {
     @Autowired
