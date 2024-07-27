@@ -10,4 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin("http://localhost:5173")
 public class PortalControlador {
 
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("Servidor funcionando");
+    }
+
+    @GetMapping("/")
+    public String saludo1() {
+        return("Servidor funcionando");
+    }
+
+    @PreAuthorize("ROLE_USUARIO")
+    @GetMapping("/hola")
+    public String saludo() {
+        return "Hola!";
+    }
+
 }
