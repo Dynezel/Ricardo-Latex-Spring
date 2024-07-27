@@ -82,6 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                         "/api/latex/**",
                         "/auth/login",
                         "/usuarios/register",
+                        "/usuarios/role",
                         "/api/latex/download/**"
                 ).permitAll()
                 .anyRequest().authenticated()
