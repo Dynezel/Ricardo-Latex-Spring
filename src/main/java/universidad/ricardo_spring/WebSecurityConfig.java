@@ -23,6 +23,8 @@ import universidad.ricardo_spring.entidades.Usuario;
 import universidad.ricardo_spring.servicios.UsuarioDetalles;
 import universidad.ricardo_spring.servicios.UsuarioService;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
@@ -73,11 +75,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                         "/",
                         "/api/latex/**",
                         "/auth/login",
+                        "/auth/logout",
                         "/usuarios/register",
                         "/usuarios/role",
                         "/api/latex/download/**"
                 ).permitAll()
                 .anyRequest().authenticated()
+                .and()
+                .logout()
+                .logoutUrl("/auth/logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                })
                 .and()
                 .formLogin().disable();
     }
