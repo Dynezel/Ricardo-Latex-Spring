@@ -20,7 +20,6 @@ import java.util.Objects;
 @RestController
 @CrossOrigin(origins = "https://ricardo-latex-react.vercel.app") // Asegúrate de que este origen coincida con tu frontend
 @RequestMapping("/api/admin")
-@PreAuthorize("hasRole('ADMINISTRADOR')")
 public class LatexAdmin {
 
     @Value("${pdf.upload.dir}")
@@ -29,6 +28,7 @@ public class LatexAdmin {
     @Autowired
     LatexContentService latexContentService;
 
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping("/create")
     public ResponseEntity<String> createContent(@RequestParam("title") String title,
                                                 @RequestParam("content") String content,

@@ -80,7 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                         "/usuarios/role",
                         "/api/latex/download/**"
                 ).permitAll()
-                .antMatchers("/api/admin/**").hasRole("ADMINISTRADOR") // Asegúrate de que esta ruta requiere el rol adecuado
+                .antMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
                 .anyRequest().authenticated()
                 .and()
                 .logout()
