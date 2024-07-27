@@ -18,9 +18,9 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 @RestController
-@CrossOrigin("http://localhost:5173")
-@PreAuthorize("ROLE_ADMINISTRADOR")
+@CrossOrigin(origins = "https://ricardo-latex-react.vercel.app") // Asegúrate de que este origen coincida con tu frontend
 @RequestMapping("/api/admin")
+@PreAuthorize("hasRole('ADMINISTRADOR')")
 public class LatexAdmin {
 
     @Value("${pdf.upload.dir}")
