@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import universidad.ricardo_spring.entidades.LoginRequest;
 import universidad.ricardo_spring.entidades.Usuario;
+import universidad.ricardo_spring.servicios.UsuarioDetalles;
 import universidad.ricardo_spring.servicios.UsuarioService;
 
 @RestController
@@ -24,7 +25,7 @@ public class AuthController {
     private UsuarioService usuarioService;
 
     @PostMapping("/login")
-    public Usuario login(@RequestBody LoginRequest loginRequest) {
+    public UsuarioDetalles login(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
@@ -32,7 +33,7 @@ public class AuthController {
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return (Usuario) usuarioService.loadUserByUsername(loginRequest.getUsername());
+        return usuarioService.loadUserByUsername(loginRequest.getUsername());
     }
 }
 

@@ -26,7 +26,7 @@ public class UsuarioController {
 
     @GetMapping("/{username}")
     public UsuarioDetalles getUser(@PathVariable String username) {
-        return (UsuarioDetalles) usuarioService.loadUserByUsername(username);
+        return usuarioService.loadUserByUsername(username);
     }
 
     @GetMapping("/role")
