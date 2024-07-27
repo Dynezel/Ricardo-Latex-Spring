@@ -30,17 +30,14 @@ public class UsuarioController {
 
     @GetMapping("/role")
     public ResponseEntity<Map<String, String>> getUserRole(Authentication authentication) {
+        Map<String, String> response = new HashMap<>();
         if (authentication == null) {
-            Map<String, String> response = new HashMap<>();
-            response.put("Error", null);
-            return ResponseEntity.ok(response);
-        }
-        else {
+            response.put("role", ""); // Devolver una cadena vacía en lugar de null
+        } else {
             String role = authentication.getAuthorities().toString();
-            Map<String, String> response = new HashMap<>();
             response.put("role", role);
-            return ResponseEntity.ok(response);
         }
+        return ResponseEntity.ok(response);
     }
 
 }
