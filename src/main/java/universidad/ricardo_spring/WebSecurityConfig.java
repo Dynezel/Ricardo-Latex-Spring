@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
             }
             return User.withUsername(usuario.getUsername())
                     .password(usuario.getPassword())
-                    .roles(String.valueOf(usuario.getRol()))
+                    .roles(usuario.getRol().name()) // Suponiendo que usuario.getRol() devuelve el rol adecuado
                     .build();
         }).passwordEncoder(passwordEncoder());
     }
@@ -67,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
         config.addAllowedOrigin("https://ricardo-latex-react.vercel.app");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        config.setAllowCredentials(true); // Permitir cookies de sesión
+        config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
