@@ -20,6 +20,7 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import universidad.ricardo_spring.entidades.Usuario;
+import universidad.ricardo_spring.servicios.UsuarioDetalles;
 import universidad.ricardo_spring.servicios.UsuarioService;
 
 @Configuration
@@ -42,16 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(username -> {
-            Usuario usuario = usuarioService.findByUsername(username);
-            if (usuario == null) {
-                throw new UsernameNotFoundException("Usuario no encontrado");
-            }
-            return User.withUsername(usuario.getUsername())
-                    .password(usuario.getPassword())
-                    .roles(usuario.getRol().name()) // Suponiendo que usuario.getRol() devuelve el rol adecuado
-                    .build();
-        }).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(usuarioService).passwordEncoder(passwordEncoder());
     }
 
     @Override
