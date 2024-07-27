@@ -29,18 +29,5 @@ public class UsuarioController {
         return usuarioService.loadUserByUsername(username);
     }
 
-    @GetMapping("/role")
-    public ResponseEntity<Map<String, String>> getUserRole(Authentication authentication) {
-        if (authentication == null) {
-            Map<String, String> response = new HashMap<>();
-            response.put("role", "");
-            return ResponseEntity.ok(response);
-        } else {
-            String role = authentication.getAuthorities().toString();
-            Map<String, String> response = new HashMap<>();
-            response.put("role", role);
-            return ResponseEntity.ok(response);
-        }
-    }
 
 }

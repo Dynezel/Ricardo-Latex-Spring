@@ -1,16 +1,14 @@
 package universidad.ricardo_spring.controladores;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import universidad.ricardo_spring.entidades.LoginRequest;
 import universidad.ricardo_spring.entidades.Usuario;
 import universidad.ricardo_spring.servicios.UsuarioDetalles;
@@ -54,5 +52,24 @@ public class AuthController {
         }
         return ResponseEntity.ok("Logout successful");
     }
+    @GetMapping("/check")
+    public ResponseEntity<String> checkAuthentication(Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            return ResponseEntity.ok("Usuario autenticado: " + authentication.getName());
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No autenticado");
+        }
+    }
+
+    @GetMapping("/role")
+    public ResponseEntity<String> checkRole(Authentication authentication) {
+        if (authentication != null && authentication.getAuthorities().stream().anyMatch(
+                authority -> authority.getAuthority().equals("ROLE_ADMINISTRADOR"))) {
+            return ResponseEntity.ok("Usuario tiene el rol ADMINISTRADOR");
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuario no tiene el rol adecuado");
+        }
+    }
+
 }
 
