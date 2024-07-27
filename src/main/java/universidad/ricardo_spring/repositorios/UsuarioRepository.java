@@ -8,6 +8,4 @@ import universidad.ricardo_spring.entidades.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Usuario findByUsername(String username);
 
-    @Query("SELECT u FROM Usuario u WHERE u.email =  :email")
-    public Usuario buscarPorEmail(@Param("email") String email);
 }
