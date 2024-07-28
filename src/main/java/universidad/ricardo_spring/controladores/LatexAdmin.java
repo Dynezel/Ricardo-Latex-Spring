@@ -2,13 +2,16 @@ package universidad.ricardo_spring.controladores;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import universidad.ricardo_spring.entidades.LatexContent;
 import universidad.ricardo_spring.servicios.LatexContentService;
+import universidad.ricardo_spring.servicios.UsuarioService;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,29 +31,41 @@ public class LatexAdmin {
     @Autowired
     LatexContentService latexContentService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping("/create")
     public ResponseEntity<String> createContent(@RequestParam("title") String title,
                                                 @RequestParam("content") String content,
                                                 @RequestParam("categoria") String categoria,
-                                                @RequestParam(value = "file", required = false) MultipartFile file) {
+                                                @RequestParam(value = "file", required = false) MultipartFile file
+                                                , Authentication authentication) {
+
         try {
-            LatexContent latexContent = new LatexContent();
-            latexContent.setTitle(title);
-            latexContent.setContent(content);
-            latexContent.setCategoria(categoria);
+            if (authentication == null) {
+                System.out.println("Authentication es null");
+            } else {
+                String username = authentication.getName();
+                usuarioService.loadUserByUsername(username);
+                LatexContent latexContent = new LatexContent();
+                latexContent.setTitle(title);
+                latexContent.setContent(content);
+                latexContent.setCategoria(categoria);
 
-            if (file != null) {
-                // Obtener el contenido del archivo como un arreglo de bytes
-                byte[] fileBytes = file.getBytes();
-                latexContent.setPdf(fileBytes);
+                if (file != null) {
+                    // Obtener el contenido del archivo como un arreglo de bytes
+                    byte[] fileBytes = file.getBytes();
+                    latexContent.setPdf(fileBytes);
+                }
+
+                // Guardar el contenido en la base de datos
+                latexContentService.createLatexContent(latexContent);
+
+                return new ResponseEntity<>("Contenido creado exitosamente", HttpStatus.OK);
             }
-
-            // Guardar el contenido en la base de datos
-            latexContentService.createLatexContent(latexContent);
-
-            return new ResponseEntity<>("Contenido creado exitosamente", HttpStatus.OK);
-        } catch (IOException e) {
+            return new ResponseEntity<>("Authentication es null", HttpStatus.NO_CONTENT);
+    } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>("Error al guardar el archivo", HttpStatus.INTERNAL_SERVER_ERROR);
         }
