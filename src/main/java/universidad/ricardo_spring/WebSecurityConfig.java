@@ -81,15 +81,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .antMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
                 .anyRequest().authenticated()
                 .and()
+                .formLogin()
+                .loginPage("/auth/login")
+                .permitAll()
+                .and()
                 .logout()
                 .logoutUrl("/auth/logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessHandler((request, response, authentication) -> {
                     response.setStatus(HttpServletResponse.SC_OK);
-                })
-                .and()
-                .httpBasic(); // Asegúrate de habilitar la autenticación básica
+                });
     }
 
     @Bean
