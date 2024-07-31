@@ -27,22 +27,6 @@ public class AuthController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUsername(),
-                            loginRequest.getPassword()
-                    )
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            UsuarioDetalles userDetails = usuarioService.loadUserByUsername(loginRequest.getUsername());
-            return ResponseEntity.ok(userDetails);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body("Invalid credentials");
-        }
-    }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
@@ -70,6 +54,8 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuario no tiene el rol adecuado");
         }
     }
+
+
 
 }
 
