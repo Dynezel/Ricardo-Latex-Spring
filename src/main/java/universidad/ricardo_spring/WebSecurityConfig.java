@@ -95,7 +95,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
-                )
+                );
     }
 
     @Bean
