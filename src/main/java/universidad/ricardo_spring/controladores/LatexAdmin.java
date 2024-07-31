@@ -34,7 +34,6 @@ public class LatexAdmin {
     @Autowired
     private UsuarioService usuarioService;
 
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping("/create")
     public ResponseEntity<String> createContent(@RequestParam("title") String title,
                                                 @RequestParam("content") String content,

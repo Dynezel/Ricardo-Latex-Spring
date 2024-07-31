@@ -74,13 +74,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .antMatchers(
                         "/",
                         "/api/latex/**",
+                        "/api/admin/create",
                         "/auth/login",
                         "/auth/logout",
                         "/usuarios/register",
                         "/usuarios/role",
                         "/api/latex/download/**"
                 ).permitAll()
-                .antMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
                 .anyRequest().authenticated()
                 .and()
                 .logout()
