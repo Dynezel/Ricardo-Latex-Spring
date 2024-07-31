@@ -74,13 +74,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .antMatchers(
                         "/",
                         "/api/latex/**",
-                        "/api/admin/create",
                         "/auth/login",
-                        "/auth/logout",
                         "/usuarios/register",
-                        "/usuarios/role",
-                        "/api/latex/download/**"
+                        "/usuarios/role"
                 ).permitAll()
+                .antMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
                 .anyRequest().authenticated()
                 .and()
                 .logout()
@@ -91,7 +89,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                     response.setStatus(HttpServletResponse.SC_OK);
                 })
                 .and()
-                .formLogin().disable();
+                .httpBasic(); // Asegúrate de habilitar la autenticación básica
     }
 
     @Bean

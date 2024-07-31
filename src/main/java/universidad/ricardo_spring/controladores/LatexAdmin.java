@@ -38,33 +38,32 @@ public class LatexAdmin {
     public ResponseEntity<String> createContent(@RequestParam("title") String title,
                                                 @RequestParam("content") String content,
                                                 @RequestParam("categoria") String categoria,
-                                                @RequestParam(value = "file", required = false) MultipartFile file
-                                                , Authentication authentication) {
-
+                                                @RequestParam(value = "file", required = false) MultipartFile file,
+                                                Authentication authentication) {
         try {
             if (authentication == null) {
                 System.out.println("Authentication es null");
-            } else {
-                String username = authentication.getName();
-                usuarioService.loadUserByUsername(username);
-                LatexContent latexContent = new LatexContent();
-                latexContent.setTitle(title);
-                latexContent.setContent(content);
-                latexContent.setCategoria(categoria);
-
-                if (file != null) {
-                    // Obtener el contenido del archivo como un arreglo de bytes
-                    byte[] fileBytes = file.getBytes();
-                    latexContent.setPdf(fileBytes);
-                }
-
-                // Guardar el contenido en la base de datos
-                latexContentService.createLatexContent(latexContent);
-
-                return new ResponseEntity<>("Contenido creado exitosamente", HttpStatus.OK);
+                return new ResponseEntity<>("Authentication es null", HttpStatus.UNAUTHORIZED);
             }
-            return new ResponseEntity<>("Authentication es null", HttpStatus.NO_CONTENT);
-    } catch (IOException e) {
+
+            String username = authentication.getName();
+            System.out.println("Usuario autenticado: " + username);
+
+            // Procesamiento y guardado del contenido
+            LatexContent latexContent = new LatexContent();
+            latexContent.setTitle(title);
+            latexContent.setContent(content);
+            latexContent.setCategoria(categoria);
+
+            if (file != null) {
+                byte[] fileBytes = file.getBytes();
+                latexContent.setPdf(fileBytes);
+            }
+
+            latexContentService.createLatexContent(latexContent);
+
+            return new ResponseEntity<>("Contenido creado exitosamente", HttpStatus.OK);
+        } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>("Error al guardar el archivo", HttpStatus.INTERNAL_SERVER_ERROR);
         }
