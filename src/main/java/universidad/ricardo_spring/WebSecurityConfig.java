@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
@@ -69,8 +70,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
         return new CorsFilter(source);
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable) // Desactivar CSRF para simplificar el ejemplo
@@ -97,6 +98,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
                 );
+        return http.build();
     }
 
     @Bean
