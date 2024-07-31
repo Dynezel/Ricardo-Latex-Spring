@@ -72,8 +72,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers(
-                        "/login",
-                        "/logincheck",
                         "/",
                         "/api/latex/**",
                         "/auth/login",
@@ -84,18 +82,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .anyRequest().authenticated()
                 .and()
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/logincheck")
+                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/auth/login") // URL para procesar la solicitud de login
                         .usernameParameter("username")
                         .passwordParameter("password")
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
+                        .logoutUrl("/auth/logout")
                         .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
-                );
+                )
     }
 
     @Bean
