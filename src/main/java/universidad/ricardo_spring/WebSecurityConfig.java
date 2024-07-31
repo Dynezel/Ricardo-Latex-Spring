@@ -25,6 +25,8 @@ import universidad.ricardo_spring.servicios.UsuarioService;
 
 import javax.servlet.http.HttpServletResponse;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
@@ -69,29 +71,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .cors().and().csrf().disable()
-                .authorizeRequests()
-                .antMatchers(
-                        "/",
-                        "/api/latex/**",
-                        "/auth/login",
-                        "/usuarios/register",
-                        "/usuarios/role"
-                ).permitAll()
-                .antMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/auth/login")
-                .permitAll()
-                .and()
-                .logout()
-                .logoutUrl("/auth/logout")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessHandler((request, response, authentication) -> {
-                    response.setStatus(HttpServletResponse.SC_OK);
-                });
+                .cors(withDefaults())
+                .csrf(csrf -> csrf.disable()) // Desactivar CSRF para simplificar el ejemplo
+                .authorizeHttpRequests(auth -> auth
+                        .antMatchers("/", "/api/latex/**", "/auth/login", "/usuarios/register", "/usuarios/role").permitAll()
+                        .antMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/auth/login") // URL para procesar la solicitud de login
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/", true)
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/auth/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                )
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
+                );
+        return http.build();
     }
 
     @Bean
