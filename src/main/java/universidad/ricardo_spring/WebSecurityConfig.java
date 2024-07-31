@@ -78,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                         "/usuarios/register",
                         "/usuarios/role"
                 ).permitAll()
-                .antMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
+                .antMatchers("/api/admin/**", "/api/admin/create").hasRole("ADMINISTRADOR")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin(form -> form
