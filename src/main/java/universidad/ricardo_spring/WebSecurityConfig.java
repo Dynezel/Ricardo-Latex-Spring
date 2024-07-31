@@ -8,12 +8,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
@@ -26,8 +24,6 @@ import universidad.ricardo_spring.servicios.UsuarioDetalles;
 import universidad.ricardo_spring.servicios.UsuarioService;
 
 import javax.servlet.http.HttpServletResponse;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -70,34 +66,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
         return new CorsFilter(source);
     }
 
-
-    @Bean
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .cors(withDefaults())
-                .csrf(AbstractHttpConfigurer::disable) // Desactivar CSRF para simplificar el ejemplo
-                .authorizeHttpRequests(auth -> auth
-                        .antMatchers("/", "/api/latex/**", "/auth/login", "/usuarios/register", "/usuarios/role").permitAll()
-                        .antMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
-                        .anyRequest().authenticated()
-                )
+                .cors().and().csrf().disable()
+                .authorizeRequests()
+                .antMatchers(
+                        "/login",
+                        "/logincheck",
+                        "/",
+                        "/api/latex/**",
+                        "/auth/login",
+                        "/usuarios/register",
+                        "/usuarios/role"
+                ).permitAll()
+                .antMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
+                .anyRequest().authenticated()
+                .and()
                 .formLogin(form -> form
-                        .loginPage("/auth/login")
-                        .loginProcessingUrl("/auth/login") // URL para procesar la solicitud de login
+                        .loginPage("/login")
+                        .loginProcessingUrl("/logincheck")
                         .usernameParameter("username")
                         .passwordParameter("password")
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/auth/logout")
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
                         .permitAll()
-                )
-                .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
                 );
     }
 
