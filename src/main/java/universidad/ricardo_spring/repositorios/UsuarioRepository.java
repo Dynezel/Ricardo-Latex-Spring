@@ -5,6 +5,6 @@ import universidad.ricardo_spring.entidades.Usuario;
 import universidad.ricardo_spring.servicios.UsuarioDetalles;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    UsuarioDetalles findByUsername(String username);
+    Usuario findByUsername(String username);
 
 }
