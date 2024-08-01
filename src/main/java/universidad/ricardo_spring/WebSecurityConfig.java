@@ -93,6 +93,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                     .deleteCookies("JSESSIONID")
                     .logoutSuccessUrl("/login") // Ruta después de un logout exitoso
                     .permitAll();
+
     }
     @Bean
     public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
