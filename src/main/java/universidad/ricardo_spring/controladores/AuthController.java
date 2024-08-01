@@ -7,15 +7,18 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 import universidad.ricardo_spring.entidades.LoginRequest;
 import universidad.ricardo_spring.entidades.Usuario;
 import universidad.ricardo_spring.servicios.UsuarioDetalles;
 import universidad.ricardo_spring.servicios.UsuarioService;
-
+import org.springframework.security.core.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -27,22 +30,26 @@ public class AuthController {
     @Autowired
     private UsuarioService usuarioService;
 
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public Map<String, Object> login(@RequestBody Map<String, String> loginRequest, HttpServletRequest request) {
+        String username = loginRequest.get("username");
+        String password = loginRequest.get("password");
+
+        Map<String, Object> response = new HashMap<>();
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUsername(),
-                            loginRequest.getPassword()
-                    )
-            );
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
+            Authentication authentication = authenticationManager.authenticate(authToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            UsuarioDetalles userDetails = usuarioService.loadUserByUsername(loginRequest.getUsername());
-            return ResponseEntity.ok(userDetails);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body("Invalid credentials");
+
+            response.put("status", "success");
+        } catch (AuthenticationException e) {
+            response.put("status", "error");
+            response.put("message", "Invalid username or password");
         }
+        return response;
     }
+
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
