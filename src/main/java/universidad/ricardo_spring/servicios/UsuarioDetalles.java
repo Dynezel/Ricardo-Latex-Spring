@@ -13,8 +13,8 @@ public class UsuarioDetalles extends User {
 
     private Long id;
 
-    public UsuarioDetalles(String username, String password, Collection<? extends GrantedAuthority> roles, Long id) {
-        super(username, password, roles);
+    public UsuarioDetalles(String username, String password, Collection<? extends GrantedAuthority> rol, Long id) {
+        super(username, password, rol);
         this.id = id;
     }
 
