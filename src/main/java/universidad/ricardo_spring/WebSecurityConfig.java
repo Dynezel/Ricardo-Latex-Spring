@@ -45,7 +45,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(usuarioService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(username -> {
+            UsuarioDetalles usuario = usuarioService.loadUserByUsername(username);
+            if (usuario == null) {
+                throw new UsernameNotFoundException("Usuario no encontrado");
+            }
+            return User.withUsername(usuario.getUsername())
+                    .password(usuario.getPassword())
+                    .roles(String.valueOf(usuario.getAuthorities()))
+                    .build();
+        }).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -78,18 +87,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                         "/auth/**",
                         "/usuarios/register",
                         "/usuarios/{username}",
-                        "/login",
                         "/perform_login"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                    .loginPage("/auth/login") // Ruta de la página de login personalizada
-                    .loginProcessingUrl("/logincheck") // Ruta para procesar el login
-                    .defaultSuccessUrl("/", true) // Ruta después de un login exitoso
-                    .failureUrl("/login?error=true") // Ruta en caso de error de login
-                    .permitAll()
-                .and()
+                .formLogin().disable()
                 .logout()
                     .logoutUrl("/auth/logout")
                     .deleteCookies("JSESSIONID")

@@ -30,24 +30,16 @@ public class AuthController {
     @Autowired
     private UsuarioService usuarioService;
 
-
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody Map<String, String> loginRequest, HttpServletRequest request) {
-        String username = loginRequest.get("username");
-        String password = loginRequest.get("password");
-
-        Map<String, Object> response = new HashMap<>();
-        try {
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
-            Authentication authentication = authenticationManager.authenticate(authToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            response.put("status", "success");
-        } catch (AuthenticationException e) {
-            response.put("status", "error");
-            response.put("message", "Invalid username or password");
-        }
-        return response;
+    public String login(@RequestBody LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return "Login successful!";
     }
 
 

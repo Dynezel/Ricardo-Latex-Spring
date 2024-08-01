@@ -55,4 +55,15 @@ public class UsuarioService implements UserDetailsService {
         );
     }
 
+    public Usuario findByUsername(String username) throws UsernameNotFoundException {
+        Usuario usuario = usuarioRepository.findByUsername(username);
+
+        if (usuario == null) {
+            throw new UsernameNotFoundException("Usuario no encontrado con el username: " + username);
+        }
+
+        return usuario;
+    }
+
+
 }
