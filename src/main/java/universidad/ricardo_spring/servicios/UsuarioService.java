@@ -36,34 +36,12 @@ public class UsuarioService implements UserDetailsService {
 
 
     @Override
-    public UsuarioDetalles loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByUsername(username);
-
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UsuarioDetalles usuario = usuarioRepository.findByUsername(username);
         if (usuario == null) {
-            throw new UsernameNotFoundException("Usuario no encontrado con el username: " + username);
+            throw new UsernameNotFoundException("Usuario no encontrado");
         }
-
-        List<GrantedAuthority> permisos = new ArrayList<>();
-        GrantedAuthority p = new SimpleGrantedAuthority("ROLE_" + usuario.getRol().toString());
-        permisos.add(p);
-
-        return new UsuarioDetalles(
-                usuario.getUsername(),
-                usuario.getPassword(),
-                permisos,
-                usuario.getId()
-        );
-    }
-
-    public Usuario findByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByUsername(username);
-
-        if (usuario == null) {
-            throw new UsernameNotFoundException("Usuario no encontrado con el username: " + username);
-        }
-
         return usuario;
     }
-
 
 }

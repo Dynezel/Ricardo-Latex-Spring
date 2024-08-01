@@ -45,16 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(username -> {
-            UsuarioDetalles usuario = usuarioService.loadUserByUsername(username);
-            if (usuario == null) {
-                throw new UsernameNotFoundException("Usuario no encontrado");
-            }
-            return User.withUsername(usuario.getUsername())
-                    .password(usuario.getPassword())
-                    .roles(String.valueOf(usuario.getAuthorities()))
-                    .build();
-        }).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(usuarioService) // Usa el servicio directamente si implementa UserDetailsService
+                .passwordEncoder(passwordEncoder()); // Configura el encoder de contraseñas
     }
 
     @Override

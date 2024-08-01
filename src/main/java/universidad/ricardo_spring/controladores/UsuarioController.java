@@ -1,15 +1,10 @@
 package universidad.ricardo_spring.controladores;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import universidad.ricardo_spring.entidades.Usuario;
-import universidad.ricardo_spring.servicios.UsuarioDetalles;
 import universidad.ricardo_spring.servicios.UsuarioService;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @CrossOrigin("https://ricardo-latex-react.vercel.app")
@@ -25,7 +20,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{username}")
-    public UsuarioDetalles getUser(@PathVariable String username) {
+    public UserDetails getUser(@PathVariable String username) {
         return usuarioService.loadUserByUsername(username);
     }
 
