@@ -10,14 +10,14 @@ import java.util.Collection;
 public class UsuarioDetalles extends User {
 
     // Getters y setters adicionales
-    private Long idUsuario;
+    private Long id;
 
-    public UsuarioDetalles(String nombre, String contrasenia, Collection<? extends GrantedAuthority> authorities, Long idUsuario) {
-        super(nombre, contrasenia, authorities);
-        this.idUsuario = idUsuario;
+    public UsuarioDetalles(String username, String password, Collection<? extends GrantedAuthority> authorities, Long id) {
+        super(username, password, authorities);
+        this.id = id;
     }
 
-    public void setIdUsuario(Long idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setId(Long id) {
+        this.id = id;
     }
 }
