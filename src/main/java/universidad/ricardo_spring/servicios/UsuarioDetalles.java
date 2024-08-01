@@ -12,8 +12,8 @@ public class UsuarioDetalles extends User {
     // Getters y setters adicionales
     private Long id;
 
-    public UsuarioDetalles(String username, String password, Collection<? extends GrantedAuthority> authorities, Long id) {
-        super(username, password, authorities);
+    public UsuarioDetalles(String username, String password, Collection<? extends GrantedAuthority> rol, Long id) {
+        super(username, password, rol);
         this.id = id;
     }
 
