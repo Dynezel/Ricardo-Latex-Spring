@@ -76,25 +76,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                         "/",
                         "/api/latex/**",
                         "/auth/login",
-                        "/auth/**",
                         "/usuarios/register",
                         "/logincheck"
                 ).permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin(form -> form
-                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/auth/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
                 .logout()
-                    .logoutUrl("/auth/logout")
-                    .deleteCookies("JSESSIONID")
-                    .logoutSuccessUrl("/login") // Ruta después de un logout exitoso
-                    .permitAll();
-
+                .logoutUrl("/auth/logout")
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("/login")
+                .permitAll();
     }
+    
     @Bean
     public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
         StrictHttpFirewall firewall = new StrictHttpFirewall();

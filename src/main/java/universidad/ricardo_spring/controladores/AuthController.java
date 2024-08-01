@@ -31,7 +31,7 @@ public class AuthController {
     private UsuarioService usuarioService;
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
@@ -39,7 +39,7 @@ public class AuthController {
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return "Login successful!";
+        return ResponseEntity.ok("Login successful!");
     }
 
 
