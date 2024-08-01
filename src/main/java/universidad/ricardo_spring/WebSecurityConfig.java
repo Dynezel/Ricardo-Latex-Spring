@@ -78,13 +78,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                         "/auth/**",
                         "/usuarios/register",
                         "/usuarios/{username}",
-                        "/login",
                         "/perform_login"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                    .loginPage("/login") // Ruta de la página de login personalizada
                     .loginProcessingUrl("/perform_login") // Ruta para procesar el login
                     .defaultSuccessUrl("/", true) // Ruta después de un login exitoso
                     .failureUrl("/login?error=true") // Ruta en caso de error de login
