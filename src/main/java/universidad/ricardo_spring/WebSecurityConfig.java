@@ -96,7 +96,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                         .permitAll()
                 );
     }
-
     @Bean
     public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
         StrictHttpFirewall firewall = new StrictHttpFirewall();
