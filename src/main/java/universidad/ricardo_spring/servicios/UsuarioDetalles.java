@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import universidad.ricardo_spring.entidades.Usuario;
 
 import java.util.Collection;
 
@@ -13,12 +14,15 @@ public class UsuarioDetalles extends User {
 
     private Long id;
 
-    public UsuarioDetalles(String username, String password, Collection<? extends GrantedAuthority> rol, Long id) {
-        super(username, password, rol);
-        this.id = id;
+    public UsuarioDetalles(Usuario usuario) {
+        super(usuario.getUsername(), usuario.getPassword(), usuario.getAuthorities());
+        this.id = usuario.getId();
     }
 
-    // Si necesitas un setter para id, puedes incluirlo aquí
+    public Long getId() {
+        return id;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
