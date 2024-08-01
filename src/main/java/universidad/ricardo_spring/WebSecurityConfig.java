@@ -87,9 +87,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                         "/auth/**",
                         "/usuarios/register",
                         "/usuarios/{username}",
-                        "/perform_login"
+                        "/logincheck"
                 ).permitAll()
                 .anyRequest().authenticated()
+                .antMatchers("/api/admin/create").hasRole("ROLE_ADMINISTRADOR")
                 .and()
                 .formLogin().disable()
                 .logout()
