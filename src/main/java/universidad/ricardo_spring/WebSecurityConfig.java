@@ -82,6 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .anyRequest().authenticated()
                 .and()
                 .formLogin(form -> form
+                        .loginPage("/auth/login")
                         .loginProcessingUrl("/logincheck") // URL para procesar la solicitud de login
                         .usernameParameter("username")
                         .passwordParameter("password")
