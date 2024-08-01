@@ -82,6 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .anyRequest().authenticated()
                 .and()
                 .formLogin(form -> form
+                        .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
@@ -94,7 +95,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .logoutSuccessUrl("/login")
                 .permitAll();
     }
-    
+
     @Bean
     public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
         StrictHttpFirewall firewall = new StrictHttpFirewall();
