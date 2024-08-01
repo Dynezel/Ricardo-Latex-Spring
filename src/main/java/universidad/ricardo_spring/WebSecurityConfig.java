@@ -77,24 +77,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                         "/auth/login",
                         "/auth/**",
                         "/usuarios/register",
-                        "/usuarios/{username}"
+                        "/usuarios/{username}",
+                        "/login",
+                        "/perform_login"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin(form -> form
-                        .loginPage("/auth/login")
-                        .usernameParameter("username")
-                        .passwordParameter("password")
-                        .defaultSuccessUrl("/", true)
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/auth/logout")
-                        .logoutSuccessUrl("/")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                        .permitAll()
-                );
+                .formLogin()
+                    .loginPage("/login") // Ruta de la página de login personalizada
+                    .loginProcessingUrl("/perform_login") // Ruta para procesar el login
+                    .defaultSuccessUrl("/", true) // Ruta después de un login exitoso
+                    .failureUrl("/login?error=true") // Ruta en caso de error de login
+                    .permitAll()
+                .and()
+                .logout()
+                    .logoutUrl("/auth/logout")
+                    .deleteCookies("JSESSIONID")
+                    .logoutSuccessUrl("/login") // Ruta después de un logout exitoso
+                    .permitAll();
     }
     @Bean
     public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
