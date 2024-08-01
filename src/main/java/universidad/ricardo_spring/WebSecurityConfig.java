@@ -69,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers(
                         "/",
@@ -82,7 +82,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .anyRequest().authenticated()
                 .and()
                 .formLogin(form -> form
-                        .loginProcessingUrl("/logincheck") // URL para procesar la solicitud de login
+                        .loginPage("/log")
+                        .loginProcessingUrl("/auth/login") // URL para procesar la solicitud de login
                         .usernameParameter("username")
                         .passwordParameter("password")
                         .defaultSuccessUrl("/", true)
