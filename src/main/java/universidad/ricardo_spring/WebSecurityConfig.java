@@ -80,11 +80,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                         "/usuarios/register",
                         "/logincheck"
                 ).permitAll()
-                .antMatchers("/usuarios/{username}").hasAnyAuthority()
-                .antMatchers("/api/admin/create").hasRole("ADMINISTRADOR")
-                .anyRequest().authenticated()
                 .and()
-                .formLogin().disable()
+                .formLogin(form -> form
+                        .loginPage("/auth/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/", true)
+                        .permitAll()
+                )
                 .logout()
                     .logoutUrl("/auth/logout")
                     .deleteCookies("JSESSIONID")
