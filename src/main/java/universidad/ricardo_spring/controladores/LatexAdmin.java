@@ -28,7 +28,7 @@ public class LatexAdmin {
     @Value("${pdf.upload.dir}")
     private String uploadDir;
 
-    @Value("${CREATION_KEY}")
+    @Value("${creation.key}")
     private String codigoCreacion;
 
     @Autowired
