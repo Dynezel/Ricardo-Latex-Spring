@@ -29,24 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
-    @Autowired
-    private UsuarioService usuarioService;
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(usuarioService) // Usa el servicio directamente si implementa UserDetailsService
-                .passwordEncoder(passwordEncoder()); // Configura el encoder de contraseñas
     }
 
     @Override
@@ -75,25 +60,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .antMatchers(
                         "/",
                         "/api/latex/**",
-                        "/auth/login",
-                        "/usuarios/register",
-                        "/logincheck"
-                ).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin(form -> form
-                        .loginPage("/auth/login")
-                        .loginProcessingUrl("/auth/login")
-                        .usernameParameter("username")
-                        .passwordParameter("password")
-                        .defaultSuccessUrl("/", true)
-                        .permitAll()
-                )
-                .logout()
-                .logoutUrl("/auth/logout")
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/login")
-                .permitAll();
+                        "/api/admin/create",
+                        "/api/admin/{id}"
+                ).permitAll();
     }
 
     @Bean
