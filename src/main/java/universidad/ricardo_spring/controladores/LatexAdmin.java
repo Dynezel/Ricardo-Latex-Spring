@@ -68,13 +68,20 @@ public class LatexAdmin {
         }
     }
 
-    @PreAuthorize("ROLE_ADMINISTRADOR")
+    @PostMapping("/verify-code")
+    public ResponseEntity<Boolean> verifyCode(@RequestBody String code) {
+        if (code.equals(codigoCreacion)) {
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.ok(false);
+        }
+    }
+
     @PutMapping("/{id}")
     public LatexContent update(@PathVariable Long id, @RequestBody LatexContent content) {
         return latexContentService.updateLatexContent(id, content);
     }
 
-    @PreAuthorize("ROLE_ADMINISTRADOR")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         latexContentService.deleteLatexContent(id);
