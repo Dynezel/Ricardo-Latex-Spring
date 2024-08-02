@@ -42,16 +42,12 @@ public class LatexAdmin {
                                                 @RequestParam("content") String content,
                                                 @RequestParam("categoria") String categoria,
                                                 @RequestParam(value = "file", required = false) MultipartFile file,
-                                                Authentication authentication) {
+                                                @RequestParam("creationKey") String creationKey) {
         try {
-            if (authentication == null) {
-                System.out.println("Authentication es null");
-                return new ResponseEntity<>("Authentication es null", HttpStatus.UNAUTHORIZED);
+            // Verificar la clave de creación
+            if (!codigoCreacion.equals(creationKey)) {
+                return new ResponseEntity<>("Clave de creación incorrecta", HttpStatus.UNAUTHORIZED);
             }
-
-            String username = authentication.getName();
-            System.out.println("Usuario autenticado: " + username);
-
             // Procesamiento y guardado del contenido
             LatexContent latexContent = new LatexContent();
             latexContent.setTitle(title);
