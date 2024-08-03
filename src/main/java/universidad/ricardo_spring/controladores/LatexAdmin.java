@@ -71,7 +71,7 @@ public class LatexAdmin {
 
     @PostMapping("/verify-code")
     public ResponseEntity<Boolean> verifyCreationCode(@RequestBody Map<String, String> requestBody) {
-        String receivedCode = requestBody.get("code");
+        String receivedCode = requestBody.get("code").trim();
 
         // Logging for debugging
         System.out.println("Expected Code: " + codigoCreacion);
