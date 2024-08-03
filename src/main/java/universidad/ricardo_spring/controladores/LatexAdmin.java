@@ -70,6 +70,8 @@ public class LatexAdmin {
 
     @PostMapping("/verify-code")
     public ResponseEntity<Boolean> verifyCode(@RequestBody String code) {
+        System.out.println("Expected Code: " + codigoCreacion); // Verifica el valor de la clave de creación
+        System.out.println("Received Code: " + code); // Verifica el valor recibido
         if (code.equals(codigoCreacion)) {
             return ResponseEntity.ok(true);
         } else {
