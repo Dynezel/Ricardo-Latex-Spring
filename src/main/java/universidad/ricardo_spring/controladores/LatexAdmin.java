@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -69,7 +70,8 @@ public class LatexAdmin {
     }
 
     @PostMapping("/verify-code")
-    public ResponseEntity<Boolean> verifyCode(@RequestBody String code) {
+    public ResponseEntity<Boolean> verifyCode(@RequestBody Map<String, String> request) {
+        String code = request.get("code");
         System.out.println("Expected Code: " + codigoCreacion); // Verifica el valor de la clave de creación
         System.out.println("Received Code: " + code); // Verifica el valor recibido
         if (code.equals(codigoCreacion)) {
