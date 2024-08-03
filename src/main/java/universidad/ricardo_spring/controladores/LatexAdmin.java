@@ -74,19 +74,19 @@ public class LatexAdmin {
         String receivedCode = requestBody.get("code");
 
         // Logging for debugging
-        System.out.println("Expected Code: " + expectedCreationCode);
+        System.out.println("Expected Code: " + codigoCreacion);
         System.out.println("Received Code: " + receivedCode);
-        System.out.println("Expected Code Length: " + expectedCreationCode.length());
+        System.out.println("Expected Code Length: " + codigoCreacion.length());
         System.out.println("Received Code Length: " + receivedCode.length());
 
-        if (expectedCreationCode.equals(receivedCode)) {
+        if (codigoCreacion.equals(receivedCode)) {
             return ResponseEntity.ok(true);
         } else {
             // Detailed comparison for debugging
-            if (expectedCreationCode.length() == receivedCode.length()) {
-                for (int i = 0; i < expectedCreationCode.length(); i++) {
-                    if (expectedCreationCode.charAt(i) != receivedCode.charAt(i)) {
-                        System.out.println("Mismatch at index " + i + ": expected '" + expectedCreationCode.charAt(i) + "', received '" + receivedCode.charAt(i) + "'");
+            if (codigoCreacion.length() == receivedCode.length()) {
+                for (int i = 0; i < codigoCreacion.length(); i++) {
+                    if (codigoCreacion.charAt(i) != receivedCode.charAt(i)) {
+                        System.out.println("Mismatch at index " + i + ": expected '" + codigoCreacion.charAt(i) + "', received '" + receivedCode.charAt(i) + "'");
                     }
                 }
             }
