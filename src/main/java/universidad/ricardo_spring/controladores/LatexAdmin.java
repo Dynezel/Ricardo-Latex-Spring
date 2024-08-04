@@ -38,7 +38,7 @@ public class LatexAdmin {
     @Autowired
     private UsuarioService usuarioService;
 
-    @PostMapping("/create")
+    @PostMapping("/create/3d9b4c8e-2764-4d1f-84df-12fa9a123d49-93b1f0d9c7a8a9cba5e9d8c3a7b2f4e6")
     public ResponseEntity<String> createContent(@RequestParam("title") String title,
                                                 @RequestParam("content") String content,
                                                 @RequestParam("categoria") String categoria,
@@ -69,7 +69,7 @@ public class LatexAdmin {
         }
     }
 
-    @PostMapping("/verify-code")
+    @PostMapping("/verify-code/6f9d3c2e-1a5b-4d6e-90bc-89f3c4e7b1a2-47e1c9d6f0a5b8d7e6c9a3b2c1f8e0d9")
     public ResponseEntity<Boolean> verifyCreationCode(@RequestBody Map<String, String> requestBody) {
         String receivedCode = requestBody.get("code").trim();
 
