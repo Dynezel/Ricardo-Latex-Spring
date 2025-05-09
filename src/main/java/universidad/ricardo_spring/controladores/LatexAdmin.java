@@ -2,24 +2,16 @@ package universidad.ricardo_spring.controladores;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import universidad.ricardo_spring.entidades.LatexContent;
 import universidad.ricardo_spring.servicios.LatexContentService;
 import universidad.ricardo_spring.servicios.UsuarioService;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @CrossOrigin(origins = "https://ricardo-latex-react.vercel.app") // Asegúrate de que este origen coincida con tu frontend
@@ -72,12 +64,6 @@ public class LatexAdmin {
     @PostMapping("/verify-code/6f9d3c2e-1a5b-4d6e-90bc-89f3c4e7b1a2-47e1c9d6f0a5b8d7e6c9a3b2c1f8e0d9")
     public ResponseEntity<Boolean> verifyCreationCode(@RequestBody Map<String, String> requestBody) {
         String receivedCode = requestBody.get("code").trim();
-
-        // Logging for debugging
-        System.out.println("Expected Code: " + codigoCreacion);
-        System.out.println("Received Code: " + receivedCode);
-        System.out.println("Expected Code Length: " + codigoCreacion.length());
-        System.out.println("Received Code Length: " + receivedCode.length());
 
         if (codigoCreacion.equals(receivedCode)) {
             return ResponseEntity.ok(true);
