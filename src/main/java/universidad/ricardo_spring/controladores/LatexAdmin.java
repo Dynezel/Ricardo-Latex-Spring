@@ -65,6 +65,7 @@ public class LatexAdmin {
         String receivedCode = requestBody.get("code").trim();
 
         if (codigoCreacion.equals(receivedCode)) {
+            System.out.println("Codigo recibido: " + receivedCode);
             return ResponseEntity.ok(true);
         } else {
             // Detailed comparison for debugging
