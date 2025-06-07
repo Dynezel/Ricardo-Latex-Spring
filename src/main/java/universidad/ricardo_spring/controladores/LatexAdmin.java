@@ -63,19 +63,10 @@ public class LatexAdmin {
     @PostMapping("/verify-code/6f9d3c2e-1a5b-4d6e-90bc-89f3c4e7b1a2-47e1c9d6f0a5b8d7e6c9a3b2c1f8e0d9")
     public ResponseEntity<Boolean> verifyCreationCode(@RequestBody Map<String, String> requestBody) {
         String receivedCode = requestBody.get("code").trim();
-        System.out.println("Hola, llegó acá");
         if (codigoCreacion.equals(receivedCode)) {
             System.out.println("Codigo recibido: " + receivedCode);
             return ResponseEntity.ok(true);
         } else {
-            // Detailed comparison for debugging
-            if (codigoCreacion.length() == receivedCode.length()) {
-                for (int i = 0; i < codigoCreacion.length(); i++) {
-                    if (codigoCreacion.charAt(i) != receivedCode.charAt(i)) {
-                        System.out.println("Mismatch at index " + i + ": expected '" + codigoCreacion.charAt(i) + "', received '" + receivedCode.charAt(i) + "'");
-                    }
-                }
-            }
             return ResponseEntity.ok(false);
         }
     }
