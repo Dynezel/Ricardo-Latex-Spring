@@ -19,5 +19,8 @@ public class RicardoSpringApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println("Variables de entorno:");
+        System.out.println("Direccion de subida: " + uploadDir);
+        System.out.println("DB URL: " + dbUrl);
+        System.out.println("DB username: " + dbUser);
     }
 }
